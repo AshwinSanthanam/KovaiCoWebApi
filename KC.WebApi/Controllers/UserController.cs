@@ -1,4 +1,5 @@
 ﻿using KC.WebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -29,11 +30,18 @@ namespace KC.WebApi.Controllers
             return Ok(GenerateJSONWebToken());
         }
 
+        [Authorize]
+        [HttpPost]
+        public IActionResult AuthTest()
+        {
+            return Ok();
+        }
+
         private string GenerateJSONWebToken()
         {
             var key = _config.GetSection("Jwt:Key").Value;
             var expiry = Convert.ToInt32(_config.GetSection("Jwt:Expiry").Value);
-            
+
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, "Ashwin"));
             claims.Add(new Claim(ClaimTypes.Role, "user"));

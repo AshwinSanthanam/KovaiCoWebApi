@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace KC.WebApi
@@ -25,13 +26,20 @@ namespace KC.WebApi
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
+            services.AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).
+            AddJwtBearer(options => 
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Jwt:Key").Value))
                 };
             });
@@ -65,9 +73,9 @@ namespace KC.WebApi
 
             app.UseCors(_corsPolicyName);
 
-            app.UseAuthorization();
-
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

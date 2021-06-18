@@ -16,7 +16,7 @@ namespace KC.WebApi.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = expiry,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
