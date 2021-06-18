@@ -17,7 +17,7 @@ namespace KC.DataAccess.Repository
             _dbContext = dbContext;
         }
 
-        public IQueryable<User> Users => _dbContext.Users.AsQueryable();
+        public IQueryable<User> Users => _dbContext.Users.Include(x => x.Role).AsQueryable();
 
         public IQueryable<Role> Roles => _dbContext.Roles.AsQueryable();
 

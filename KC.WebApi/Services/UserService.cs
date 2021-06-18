@@ -64,7 +64,7 @@ namespace KC.WebApi.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            claims.Add(new Claim(ClaimTypes.Role, "user"));
+            claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
 
             return _jwtService.GenerateJwt(claims, DateTime.Now.AddDays(expiry), key);
         }
