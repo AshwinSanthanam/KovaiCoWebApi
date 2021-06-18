@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KC.DataAccess.Migrations
 {
-    public partial class AddUserTable : Migration
+    public partial class CreateUserTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

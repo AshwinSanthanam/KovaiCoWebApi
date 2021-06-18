@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KC.DataAccess.Migrations
 {
     [DbContext(typeof(KovaiCoDbContext))]
-    [Migration("20210618181426_AddUserTable")]
-    partial class AddUserTable
+    [Migration("20210618212514_CreateUserTable")]
+    partial class CreateUserTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
