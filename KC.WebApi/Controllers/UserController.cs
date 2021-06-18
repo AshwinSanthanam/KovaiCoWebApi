@@ -42,5 +42,30 @@ namespace KC.WebApi.Controllers
                 return Conflict(response);
             }
         }
+
+        [HttpPost]
+        [Route("authenticate")]
+        public async Task<IActionResult> AuthenticateUser([FromBody] AuthenticateUserRequest request)
+        {
+            string jwt = await _userService.AuthenticateUser(request);
+            if(string.IsNullOrEmpty(jwt))
+            {
+                var response = new GenericResponse<string>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid Credentials"
+                };
+                return Unauthorized(response);
+            }
+            else
+            {
+                var response = new GenericResponse<string>
+                {
+                    IsSuccess = true,
+                    Payload = jwt
+                };
+                return Ok(response);
+            }
+        }
     }
 }

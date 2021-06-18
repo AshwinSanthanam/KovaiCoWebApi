@@ -30,6 +30,7 @@ namespace KC.WebApi.Registry
             _services.AddScoped<IRepository, Repository>();
             _services.AddScoped<IUserValidator, UserValidator>();
             _services.AddScoped<IRoleQueries, RoleQueries>();
+            _services.AddScoped<IUserQueries, UserQueries>();
         }
     }
 }
