@@ -1,7 +1,9 @@
-﻿namespace KC.Base.Validators
+﻿using System.Threading.Tasks;
+
+namespace KC.Base.Validators
 {
     public interface IValidator<T>
     {
-        void Validate<T>(T transientEntity);
+        Task Validate(T transientEntity);
     }
 }
