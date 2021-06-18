@@ -8,5 +8,7 @@ namespace KC.Base.Validators
         void ValidateEmailPattern(TransientUser transientUser);
 
         Task ValidateUniqueEmail(TransientUser transientUser);
+
+        void ValidateMandatoryPassword(TransientUser transientUser);
     }
 }

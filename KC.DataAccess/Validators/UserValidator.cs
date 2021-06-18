@@ -21,6 +21,7 @@ namespace KC.DataAccess.Validators
         {
             ValidateEmailPattern(transientEntity);
             await ValidateUniqueEmail(transientEntity);
+            ValidateMandatoryPassword(transientEntity);
         }
 
         public void ValidateEmailPattern(TransientUser transientUser)
@@ -29,6 +30,14 @@ namespace KC.DataAccess.Validators
             if (!isValidEmail)
             {
                 throw new DataIntegrityException(nameof(User), nameof(User.Email), "Invalid Email");
+            }
+        }
+
+        public void ValidateMandatoryPassword(TransientUser transientUser)
+        {
+            if (string.IsNullOrEmpty(transientUser.Password))
+            {
+                throw new DataIntegrityException(nameof(User), nameof(User.Password), "Password is Required");
             }
         }
 
