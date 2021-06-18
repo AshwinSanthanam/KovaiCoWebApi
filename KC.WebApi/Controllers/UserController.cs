@@ -1,4 +1,5 @@
-﻿using KC.WebApi.Models.User;
+﻿using KC.Base.Validators;
+using KC.WebApi.Models.User;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -19,8 +20,15 @@ namespace KC.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            var user = await _userService.CreateUser(request);
-            return Ok(user);
+            try
+            {
+                var user = await _userService.CreateUser(request);
+                return Ok(user);
+            }
+            catch(DataIntegrityException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
     }
 }
