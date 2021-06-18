@@ -34,10 +34,19 @@ namespace KC.WebApi.Services
             _userQueries = userQueries;
         }
 
-        public async Task<string> AuthenticateUser(AuthenticateUserRequest request)
+        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
+        {
+            var transientUser = _mapper.Map(request, new TransientUser());
+            transientUser.RoleId = await _roleQueries.GetRoleId("user");
+            await _userValidator.Validate(transientUser);
+            var user = await _repository.InsertUser(transientUser);
+            return _mapper.Map(user, new CreateUserResponse());
+        }
+
+        public async Task<string> Authenticate(AuthenticateUserRequest request, string role)
         {
             var user = await _userQueries.GetUser(request.Email, request.Password);
-            if(user == null)
+            if (user == null || user.Role.Name != role)
             {
                 return null;
             }
@@ -46,15 +55,6 @@ namespace KC.WebApi.Services
                 string jwt = GenerateJSONWebToken(user);
                 return jwt;
             }
-        }
-
-        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
-        {
-            var transientUser = _mapper.Map(request, new TransientUser());
-            transientUser.RoleId = await _roleQueries.GetRoleId("user");
-            await _userValidator.Validate(transientUser);
-            var user = await _repository.InsertUser(transientUser);
-            return _mapper.Map(user, new CreateUserResponse());
         }
 
         private string GenerateJSONWebToken(User user)

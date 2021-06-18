@@ -47,8 +47,20 @@ namespace KC.WebApi.Controllers
         [Route("authenticate")]
         public async Task<IActionResult> AuthenticateUser([FromBody] AuthenticateUserRequest request)
         {
-            string jwt = await _userService.AuthenticateUser(request);
-            if(string.IsNullOrEmpty(jwt))
+            return await Authenticate(request, "user");
+        }
+
+        [HttpPost]
+        [Route("authenticate/admin")]
+        public async Task<IActionResult> AuthenticateAdmin([FromBody] AuthenticateUserRequest request)
+        {
+            return await Authenticate(request, "admin");
+        }
+
+        private async Task<IActionResult> Authenticate(AuthenticateUserRequest request, string role)
+        {
+            string jwt = await _userService.Authenticate(request, role);
+            if (string.IsNullOrEmpty(jwt))
             {
                 var response = new GenericResponse<string>
                 {
