@@ -1,4 +1,6 @@
-﻿using KC.Base.Validators;
+﻿using KC.Base.Models;
+using KC.Base.Validators;
+using KC.WebApi.Models;
 using KC.WebApi.Models.User;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +25,21 @@ namespace KC.WebApi.Controllers
             try
             {
                 var user = await _userService.CreateUser(request);
-                return Ok(user);
+                var response = new GenericResponse<User>
+                {
+                    IsSuccess = true,
+                    Payload = user
+                };
+                return Ok(response);
             }
             catch(DataIntegrityException ex)
             {
-                return Conflict(ex.Message);
+                var response = new GenericResponse<User>
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+                return Conflict(response);
             }
         }
     }
