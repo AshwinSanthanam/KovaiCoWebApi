@@ -8,6 +8,7 @@ namespace KC.Base
     public interface IRepository
     {
         IQueryable<User> Users { get; }
+        IQueryable<Role> Roles { get; }
 
         Task<User> InsertUser(TransientUser transientUser);
 

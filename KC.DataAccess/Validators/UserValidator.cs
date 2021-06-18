@@ -22,6 +22,7 @@ namespace KC.DataAccess.Validators
             ValidateEmailPattern(transientEntity);
             await ValidateUniqueEmail(transientEntity);
             ValidateMandatoryPassword(transientEntity);
+            await ValidateRole(transientEntity);
         }
 
         public void ValidateEmailPattern(TransientUser transientUser)
@@ -38,6 +39,15 @@ namespace KC.DataAccess.Validators
             if (string.IsNullOrEmpty(transientUser.Password))
             {
                 throw new DataIntegrityException(nameof(User), nameof(User.Password), "Password is Required");
+            }
+        }
+
+        public async Task ValidateRole(TransientUser transientUser)
+        {
+            var doesRoleExist = await _repository.Roles.AnyAsync(x => x.Id == transientUser.RoleId);
+            if(!doesRoleExist)
+            {
+                throw new DataIntegrityException(nameof(User), nameof(User.RoleId), "Invalid Role Id");
             }
         }
 

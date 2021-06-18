@@ -4,14 +4,16 @@ using KC.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KC.DataAccess.Migrations
 {
     [DbContext(typeof(KovaiCoDbContext))]
-    partial class KovaiCoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210618214321_AddRoleReferenceToUser")]
+    partial class AddRoleReferenceToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +77,7 @@ namespace KC.DataAccess.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<long>("RoleId")
+                    b.Property<long?>("RoleId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset?>("UpdatedOn")
@@ -97,9 +99,7 @@ namespace KC.DataAccess.Migrations
                 {
                     b.HasOne("KC.Base.Models.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });

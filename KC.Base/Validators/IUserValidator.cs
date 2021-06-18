@@ -10,5 +10,7 @@ namespace KC.Base.Validators
         Task ValidateUniqueEmail(TransientUser transientUser);
 
         void ValidateMandatoryPassword(TransientUser transientUser);
+
+        Task ValidateRole(TransientUser transientUser);
     }
 }

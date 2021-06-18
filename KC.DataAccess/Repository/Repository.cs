@@ -19,6 +19,8 @@ namespace KC.DataAccess.Repository
 
         public IQueryable<User> Users => _dbContext.Users.AsQueryable();
 
+        public IQueryable<Role> Roles => _dbContext.Roles.AsQueryable();
+
         public async Task<User> DeleteUser(long id)
         {
             var userToBeDeleted = await _dbContext.Users.FirstAsync(x => x.Id == id);
@@ -36,6 +38,7 @@ namespace KC.DataAccess.Repository
                 Email = transientUser.Email,
                 Password = transientUser.Password,
                 IsActive = true,
+                RoleId = transientUser.RoleId,
                 CreatedOn = DateTimeOffset.Now
             };
             _dbContext.Users.Add(user);
