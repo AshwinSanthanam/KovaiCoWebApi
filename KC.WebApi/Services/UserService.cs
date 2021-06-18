@@ -1,4 +1,5 @@
-﻿using KC.Base;
+﻿using AutoMapper;
+using KC.Base;
 using KC.Base.Models;
 using KC.Base.TransientModels;
 using KC.WebApi.Models.User;
@@ -15,21 +16,21 @@ namespace KC.WebApi.Services
         private readonly IRepository _repository;
         private readonly IConfiguration _config;
         private readonly IJwtService _jwtService;
+        private readonly IMapper _mapper;
 
-        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService)
+        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper)
         {
             _repository = repository;
             _config = config;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
 
         public async Task<User> CreateUser(CreateUserRequest request)
         {
-            return await _repository.InsertUser(new TransientUser
-            {
-                Email = request.Email,
-                Password = request.Password
-            });
+            var transientUser = new TransientUser();
+            _mapper.Map(request, transientUser);
+            return await _repository.InsertUser(transientUser);
         }
 
         private string GenerateJSONWebToken()

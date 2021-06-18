@@ -1,3 +1,4 @@
+using KC.WebApi.MappingProfiles;
 using KC.WebApi.Registry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,7 @@ namespace KC.WebApi
             RegisterRegistry(registries);
 
             services.AddControllers();
+            services.AddAutoMapper(typeof(ApiResourceToTransientMapper));
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
