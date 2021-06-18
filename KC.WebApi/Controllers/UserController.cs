@@ -1,7 +1,7 @@
 ﻿using KC.Base;
 using KC.Base.TransientModels;
+using KC.WebApi.Models.User;
 using KC.WebApi.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -26,22 +26,15 @@ namespace KC.WebApi.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Test()
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest resource)
         {
             var user = await _repository.InsertUser(new TransientUser 
             {
-                Email = "as@123.cpm",
-                Password = "123"
+                Email = resource.Email,
+                Password = resource.Password
             });
             return Ok(user);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult AuthTest()
-        {
-            return Ok();
         }
 
         private string GenerateJSONWebToken()
