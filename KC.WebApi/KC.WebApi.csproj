@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KC.Base\KC.Base.csproj" />
+    <ProjectReference Include="..\KC.DataAccess\KC.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
