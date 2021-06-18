@@ -1,10 +1,13 @@
-﻿using KC.WebApi.Services;
+﻿using KC.Base;
+using KC.Base.TransientModels;
+using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace KC.WebApi.Controllers
 {
@@ -14,17 +17,24 @@ namespace KC.WebApi.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IJwtService _jwtService;
+        private readonly IRepository _repository;
 
-        public UserController(IConfiguration config, IJwtService jwtService)
+        public UserController(IConfiguration config, IJwtService jwtService, IRepository repository)
         {
             _config = config;
             _jwtService = jwtService;
+            _repository = repository;
         }
 
         [HttpGet]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
-            return Ok(GenerateJSONWebToken());
+            var user = await _repository.InsertUser(new TransientUser 
+            {
+                Email = "as@123.cpm",
+                Password = "123"
+            });
+            return Ok(user);
         }
 
         [Authorize]

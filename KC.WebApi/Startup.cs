@@ -1,7 +1,10 @@
+using KC.Base;
+using KC.DataAccess.Repository;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,12 +52,19 @@ namespace KC.WebApi
             });
 
             services.AddControllers();
+
+            services.AddDbContext<KovaiCoDbContext>(o =>
+            {
+                o.UseSqlServer(Configuration.GetConnectionString("KovaiCoRepository"));
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KC.WebApi", Version = "v1" });
             });
 
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IRepository, Repository>();
         }
 
         
