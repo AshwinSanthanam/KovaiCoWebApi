@@ -29,11 +29,12 @@ namespace KC.WebApi.Services
             _userValidator = userValidator;
         }
 
-        public async Task<User> CreateUser(CreateUserRequest request)
+        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
             var transientUser = _mapper.Map(request, new TransientUser());
             await _userValidator.Validate(transientUser);
-            return await _repository.InsertUser(transientUser);
+            var user = await _repository.InsertUser(transientUser);
+            return _mapper.Map(user, new CreateUserResponse());
         }
 
         private string GenerateJSONWebToken()

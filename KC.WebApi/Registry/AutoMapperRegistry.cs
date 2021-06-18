@@ -17,7 +17,8 @@ namespace KC.WebApi.Registry
         {
             var types = new Type[]
             {
-                typeof(ApiResourceToTransientMapper)
+                typeof(ApiResourceToTransientMapper),
+                typeof(DomainModelToApiResource)
             };
 
             _services.AddAutoMapper(types);

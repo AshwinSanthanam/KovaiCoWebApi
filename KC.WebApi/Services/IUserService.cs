@@ -6,6 +6,6 @@ namespace KC.WebApi.Services
 {
     public interface IUserService
     {
-        Task<User> CreateUser(CreateUserRequest request);
+        Task<CreateUserResponse> CreateUser(CreateUserRequest request);
     }
 }

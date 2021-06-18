@@ -24,17 +24,17 @@ namespace KC.WebApi.Controllers
         {
             try
             {
-                var user = await _userService.CreateUser(request);
-                var response = new GenericResponse<User>
+                var createUserResponse = await _userService.CreateUser(request);
+                var response = new GenericResponse<CreateUserResponse>
                 {
                     IsSuccess = true,
-                    Payload = user
+                    Payload = createUserResponse
                 };
                 return Ok(response);
             }
             catch(DataIntegrityException ex)
             {
-                var response = new GenericResponse<User>
+                var response = new GenericResponse<CreateUserResponse>
                 {
                     IsSuccess = false,
                     Message = ex.Message
