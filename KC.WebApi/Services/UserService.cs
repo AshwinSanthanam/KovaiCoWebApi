@@ -2,6 +2,7 @@
 using KC.Base;
 using KC.Base.Models;
 using KC.Base.TransientModels;
+using KC.Base.Validators;
 using KC.WebApi.Models.User;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -14,22 +15,24 @@ namespace KC.WebApi.Services
     public class UserService : IUserService
     {
         private readonly IRepository _repository;
+        private readonly IUserValidator _userValidator;
         private readonly IConfiguration _config;
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
 
-        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper)
+        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper, IUserValidator userValidator)
         {
             _repository = repository;
             _config = config;
             _jwtService = jwtService;
             _mapper = mapper;
+            _userValidator = userValidator;
         }
 
         public async Task<User> CreateUser(CreateUserRequest request)
         {
-            var transientUser = new TransientUser();
-            _mapper.Map(request, transientUser);
+            var transientUser = _mapper.Map(request, new TransientUser());
+            await _userValidator.Validate(transientUser);
             return await _repository.InsertUser(transientUser);
         }
 

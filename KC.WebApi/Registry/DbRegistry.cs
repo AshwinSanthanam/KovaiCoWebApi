@@ -1,5 +1,7 @@
 ﻿using KC.Base;
+using KC.Base.Validators;
 using KC.DataAccess.Repository;
+using KC.DataAccess.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +26,7 @@ namespace KC.WebApi.Registry
             });
 
             _services.AddScoped<IRepository, Repository>();
+            _services.AddScoped<IUserValidator, UserValidator>();
         }
     }
 }
