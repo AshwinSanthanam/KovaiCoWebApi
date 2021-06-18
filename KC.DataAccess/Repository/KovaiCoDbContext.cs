@@ -1,4 +1,5 @@
 ﻿using KC.Base.Models;
+using KC.DataAccess.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace KC.DataAccess.Repository
@@ -10,5 +11,10 @@ namespace KC.DataAccess.Repository
         }
 
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new UserConfiguration());
+        }
     }
 }
