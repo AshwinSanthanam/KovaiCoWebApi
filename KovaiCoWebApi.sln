@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KC.WebApi", "KC.WebApi\KC.WebApi.csproj", "{BBA1E0D5-6947-4605-BDC5-85984D7A2BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KC.WebApi", "KC.WebApi\KC.WebApi.csproj", "{BBA1E0D5-6947-4605-BDC5-85984D7A2BD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KC.Base", "KC.Base\KC.Base.csproj", "{AFFC05E3-FFC1-4355-A475-8064482C8565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BBA1E0D5-6947-4605-BDC5-85984D7A2BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBA1E0D5-6947-4605-BDC5-85984D7A2BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBA1E0D5-6947-4605-BDC5-85984D7A2BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFFC05E3-FFC1-4355-A475-8064482C8565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFFC05E3-FFC1-4355-A475-8064482C8565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFFC05E3-FFC1-4355-A475-8064482C8565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFFC05E3-FFC1-4355-A475-8064482C8565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
