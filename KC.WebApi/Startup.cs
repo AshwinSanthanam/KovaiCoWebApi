@@ -1,4 +1,3 @@
-using KC.WebApi.MappingProfiles;
 using KC.WebApi.Registry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,13 +29,13 @@ namespace KC.WebApi
                 new CorsRegistry(services, _corsPolicyName),
                 new DbRegistry(services, Configuration.GetConnectionString("KovaiCoRepository")),
                 new SwaggerRegistry(services),
-                new ServiceRegistry(services)
+                new ServiceRegistry(services),
+                new AutoMapperRegistry(services)
             };
 
             RegisterRegistry(registries);
 
             services.AddControllers();
-            services.AddAutoMapper(typeof(ApiResourceToTransientMapper));
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
