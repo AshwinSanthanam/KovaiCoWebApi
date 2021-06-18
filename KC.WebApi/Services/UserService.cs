@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using KC.Base;
-using KC.Base.Models;
+using KC.Base.Queries;
 using KC.Base.TransientModels;
 using KC.Base.Validators;
 using KC.WebApi.Models.User;
@@ -16,22 +16,25 @@ namespace KC.WebApi.Services
     {
         private readonly IRepository _repository;
         private readonly IUserValidator _userValidator;
+        private readonly IRoleQueries _roleQueries;
         private readonly IConfiguration _config;
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
 
-        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper, IUserValidator userValidator)
+        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper, IUserValidator userValidator, IRoleQueries roleQueries)
         {
             _repository = repository;
             _config = config;
             _jwtService = jwtService;
             _mapper = mapper;
             _userValidator = userValidator;
+            _roleQueries = roleQueries;
         }
 
         public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
             var transientUser = _mapper.Map(request, new TransientUser());
+            transientUser.RoleId = await _roleQueries.GetRoleId("user");
             await _userValidator.Validate(transientUser);
             var user = await _repository.InsertUser(transientUser);
             return _mapper.Map(user, new CreateUserResponse());
