@@ -17,7 +17,7 @@ namespace KC.DataAccess.Repository
             _dbContext = dbContext;
         }
 
-        public IQueryable<User> Users => throw new NotImplementedException();
+        public IQueryable<User> Users => _dbContext.Users.AsQueryable();
 
         public async Task<User> DeleteUser(long id)
         {
