@@ -1,3 +1,4 @@
+using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,8 @@ namespace KC.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KC.WebApi", Version = "v1" });
             });
+
+            services.AddScoped<IJwtService, JwtService>();
         }
 
         

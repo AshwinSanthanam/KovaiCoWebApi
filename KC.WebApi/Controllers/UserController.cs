@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KC.WebApi.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,10 +15,12 @@ namespace KC.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly IJwtService _jwtService;
 
-        public UserController(IConfiguration config)
+        public UserController(IConfiguration config, IJwtService jwtService)
         {
             _config = config;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -31,21 +34,11 @@ namespace KC.WebApi.Controllers
             var key = _config.GetSection("Jwt:Key").Value;
             var expiry = Convert.ToInt32(_config.GetSection("Jwt:Expiry").Value);
             
-            var keyBytes = Encoding.ASCII.GetBytes(key);
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, "Ashwin"));
             claims.Add(new Claim(ClaimTypes.Role, "user"));
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(expiry),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256)
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return _jwtService.GenerateJwt(claims, DateTime.Now.AddDays(expiry), key);
         }
     }
 }
