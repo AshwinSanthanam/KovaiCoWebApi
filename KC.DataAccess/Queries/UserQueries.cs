@@ -17,7 +17,7 @@ namespace KC.DataAccess.Queries
 
         public async Task<User> GetUser(string email, string password)
         {
-            return await _repository.Users.FirstAsync(x => x.Email == email && x.Password == password);
+            return await _repository.Users.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
         }
     }
 }
