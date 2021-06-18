@@ -15,6 +15,7 @@ namespace KC.DataAccess.Repository
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
         }
     }
