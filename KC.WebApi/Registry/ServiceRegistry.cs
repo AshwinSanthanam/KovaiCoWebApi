@@ -15,6 +15,7 @@ namespace KC.WebApi.Registry
         public void Register()
         {
             _services.AddScoped<IJwtService, JwtService>();
+            _services.AddScoped<IUserService, UserService>();
         }
     }
 }
