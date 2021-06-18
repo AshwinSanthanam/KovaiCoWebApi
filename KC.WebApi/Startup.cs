@@ -16,6 +16,8 @@ namespace KC.WebApi
 {
     public class Startup
     {
+        private static readonly string _corsPolicyName = "Open";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,9 +25,12 @@ namespace KC.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => {
+                options.AddPolicy(_corsPolicyName, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -34,7 +39,7 @@ namespace KC.WebApi
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -47,6 +52,8 @@ namespace KC.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_corsPolicyName);
 
             app.UseAuthorization();
 
