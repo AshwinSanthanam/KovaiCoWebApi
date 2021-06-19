@@ -34,5 +34,10 @@ namespace KC.WebApi.Services
             }
             return _mapper.Map(product, new CreateOrUpdateProductResponse());
         }
+
+        public async Task DeleteProduct(long id)
+        {
+            await _repository.DeleteProduct(id);
+        }
     }
 }

@@ -41,5 +41,27 @@ namespace KC.WebApi.Controllers
                 });
             }
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteProduct(long id)
+        {
+            try
+            {
+                await _productService.DeleteProduct(id);
+                return Ok(new GenericResponse<object>
+                {
+                    IsSuccess = true
+                });
+            }
+            catch(InvalidOperationException)
+            {
+                return NotFound(new GenericResponse<CreateOrUpdateProductResponse>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid Product Id provided for delete"
+                });
+            }
+        }
     }
 }
