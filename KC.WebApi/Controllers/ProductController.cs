@@ -10,7 +10,6 @@ namespace KC.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -20,6 +19,7 @@ namespace KC.WebApi.Controllers
             _productService = productService;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdateProduct([FromBody] CreateOrUpdateProductRequest request)
         {
@@ -42,6 +42,7 @@ namespace KC.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
