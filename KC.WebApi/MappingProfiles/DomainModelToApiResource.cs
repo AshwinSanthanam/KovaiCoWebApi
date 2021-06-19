@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KC.Base.Models;
+using KC.WebApi.Models.Product;
 using KC.WebApi.Models.User;
 
 namespace KC.WebApi.MappingProfiles
@@ -9,6 +10,7 @@ namespace KC.WebApi.MappingProfiles
         public DomainModelToApiResource()
         {
             CreateMap<User, CreateUserResponse>();
+            CreateMap<Product, CreateOrUpdateProductResponse>();
         }
     }
 }

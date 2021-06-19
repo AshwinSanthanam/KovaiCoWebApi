@@ -16,6 +16,7 @@ namespace KC.WebApi.Registry
         {
             _services.AddScoped<IJwtService, JwtService>();
             _services.AddScoped<IUserService, UserService>();
+            _services.AddScoped<IProductService, ProductService>();
         }
     }
 }
