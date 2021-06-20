@@ -1,9 +1,12 @@
-﻿using KC.Base.Models;
+﻿using Google.Apis.Auth;
+using KC.Base.Models;
 using KC.Base.Validators;
 using KC.WebApi.Models;
 using KC.WebApi.Models.User;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KC.WebApi.Controllers
@@ -78,6 +81,34 @@ namespace KC.WebApi.Controllers
                 };
                 return Ok(response);
             }
+        }
+
+        [HttpPost]
+        [Route("authenticate/external")]
+        public async Task<IActionResult> AuthenticateExternalUser([FromBody] AuthenticateExternalUserRequest request)
+        {
+            GoogleJsonWebSignature.Payload payload = null;
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { "756422371399-dql4mjnrt5lpapagmv1n8pqvnj3hm4gp.apps.googleusercontent.com" }
+                };
+                payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
+            }
+            catch(Exception)
+            {
+                return BadRequest(new GenericResponse<string> 
+                {
+                    IsSuccess = false,
+                    Message = "Invalid External Authentication"
+                });
+            }
+            return Ok(new GenericResponse<string>
+            {
+                IsSuccess = true,
+                Payload = "JWT To Send"
+            });
         }
     }
 }
