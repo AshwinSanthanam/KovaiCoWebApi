@@ -27,14 +27,19 @@ namespace KC.WebApi.Services
         public async Task<CreateOrUpdateProductResponse> CreateOrUpdateProduct(CreateOrUpdateProductRequest request)
         {
             var transientProduct = _mapper.Map(request, new TransientProduct());
-            await _productValidator.Validate(transientProduct);
+            
             Product product = null;
-            if (request.Id.HasValue)
+            if (request.Id.HasValue && request.Id.Value > 0)
             {
+                if(await _repository.Products.AnyAsync(x => x.Name == transientProduct.Name && x.Id != request.Id))
+                {
+                    await _productValidator.Validate(transientProduct);
+                }
                 product = await _repository.UpdateProduct(request.Id.Value, transientProduct);
             }
             else
             {
+                await _productValidator.Validate(transientProduct);
                 product = await _repository.InsertProduct(transientProduct);
             }
             return _mapper.Map(product, new CreateOrUpdateProductResponse());
@@ -47,7 +52,7 @@ namespace KC.WebApi.Services
 
         public async Task<IEnumerable<GetProductResponse>> GetProducts(int pageSize, int offset, string productName)
         {
-            var products = _repository.Products;
+            var products = _repository.Products.Where(x => x.IsActive);
             if(!string.IsNullOrEmpty(productName))
             {
                 string productNameLowerCase = productName.ToLower();

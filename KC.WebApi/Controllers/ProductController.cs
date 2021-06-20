@@ -21,7 +21,7 @@ namespace KC.WebApi.Controllers
             _productService = productService;
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdateProduct([FromBody] CreateOrUpdateProductRequest request)
         {
@@ -52,7 +52,7 @@ namespace KC.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
