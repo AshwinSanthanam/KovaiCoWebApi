@@ -36,7 +36,7 @@ namespace KC.DataAccess.Validators
 
         public void ValidateMandatoryPassword(TransientUser transientUser)
         {
-            if (string.IsNullOrEmpty(transientUser.Password))
+            if (string.IsNullOrEmpty(transientUser.Password) && !transientUser.IsSocialLogin)
             {
                 throw new DataIntegrityException(nameof(User), nameof(User.Password), "Password is Required");
             }
