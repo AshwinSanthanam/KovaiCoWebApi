@@ -99,18 +99,30 @@ namespace KC.WebApi.Controllers
         [Route("authenticate/external")]
         public async Task<IActionResult> AuthenticateExternalUser([FromBody] AuthenticateExternalUserRequest request)
         {
+            return await AuthenticateExternal(request, "user");
+        }
+
+        [HttpPost]
+        [Route("authenticate/external/admin")]
+        public async Task<IActionResult> AuthenticateExternalAdmin([FromBody] AuthenticateExternalUserRequest request)
+        {
+            return await AuthenticateExternal(request, "admin");
+        }
+
+        private async Task<IActionResult> AuthenticateExternal(AuthenticateExternalUserRequest request, string role)
+        {
             try
             {
-                string jwt = await _userService.AuthenticateExternalUser(request, "user");
-                return Ok(new GenericResponse<string> 
+                string jwt = await _userService.AuthenticateExternalUser(request, role);
+                return Ok(new GenericResponse<string>
                 {
                     IsSuccess = true,
                     Payload = jwt
                 });
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return Unauthorized(new GenericResponse<string> 
+                return Unauthorized(new GenericResponse<string>
                 {
                     IsSuccess = false,
                     Message = "Invalid External Authentication"
