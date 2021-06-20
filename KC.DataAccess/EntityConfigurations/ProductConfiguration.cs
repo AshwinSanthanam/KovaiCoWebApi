@@ -12,7 +12,7 @@ namespace KC.DataAccess.EntityConfigurations
 
             builder.Property(x => x.Price).HasColumnType("decimal").HasPrecision(20, 2).IsRequired();
 
-            builder.Property(x => x.Image).HasColumnType("varchar").HasMaxLength(50);
+            builder.Property(x => x.ImageUrl).HasColumnType("varchar").HasMaxLength(500);
 
             builder.HasIndex(x => x.Name).IsUnique();
 
