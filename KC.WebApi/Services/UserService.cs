@@ -21,9 +21,10 @@ namespace KC.WebApi.Services
         private readonly IRoleQueries _roleQueries;
         private readonly IConfiguration _config;
         private readonly IJwtService _jwtService;
+        private readonly IExternalTokenValidationService _externalTokenValidationService;
         private readonly IMapper _mapper;
 
-        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper, IUserValidator userValidator, IRoleQueries roleQueries, IUserQueries userQueries)
+        public UserService(IRepository repository, IConfiguration config, IJwtService jwtService, IMapper mapper, IUserValidator userValidator, IRoleQueries roleQueries, IUserQueries userQueries, IExternalTokenValidationService externalTokenValidationService)
         {
             _repository = repository;
             _config = config;
@@ -32,6 +33,7 @@ namespace KC.WebApi.Services
             _userValidator = userValidator;
             _roleQueries = roleQueries;
             _userQueries = userQueries;
+            _externalTokenValidationService = externalTokenValidationService;
         }
 
         public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -67,6 +69,25 @@ namespace KC.WebApi.Services
             claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
 
             return _jwtService.GenerateJwt(claims, DateTime.Now.AddDays(expiry), key);
+        }
+
+        public async Task<string> AuthenticateExternalUser(AuthenticateExternalUserRequest request, string role)
+        {
+            var clientId = _config.GetSection("ExternalAuth:GoogleClientId").Value;
+            var payload = await _externalTokenValidationService.ValidateGoogleToken(clientId, request.IdToken);
+            var user = await _userQueries.GetUser(payload.Email);
+            if(user == null)
+            {
+                var transientUser = new TransientUser
+                {
+                    Email = payload.Email,
+                    IsSocialLogin = true,
+                    Password = null,
+                    RoleId = await _roleQueries.GetRoleId(role)
+                };
+                user = await _repository.InsertUser(transientUser);
+            }
+            return GenerateJSONWebToken(user);
         }
     }
 }

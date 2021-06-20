@@ -19,5 +19,10 @@ namespace KC.DataAccess.Queries
         {
             return await _repository.Users.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
         }
+
+        public async Task<User> GetUser(string email)
+        {
+            return await _repository.Users.FirstOrDefaultAsync(x => x.Email == email);
+        }
     }
 }

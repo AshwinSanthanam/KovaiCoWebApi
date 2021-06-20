@@ -87,28 +87,23 @@ namespace KC.WebApi.Controllers
         [Route("authenticate/external")]
         public async Task<IActionResult> AuthenticateExternalUser([FromBody] AuthenticateExternalUserRequest request)
         {
-            GoogleJsonWebSignature.Payload payload = null;
             try
             {
-                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                string jwt = await _userService.AuthenticateExternalUser(request, "user");
+                return Ok(new GenericResponse<string> 
                 {
-                    Audience = new List<string>() { "756422371399-dql4mjnrt5lpapagmv1n8pqvnj3hm4gp.apps.googleusercontent.com" }
-                };
-                payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
+                    IsSuccess = true,
+                    Payload = jwt
+                });
             }
             catch(Exception)
             {
-                return BadRequest(new GenericResponse<string> 
+                return Unauthorized(new GenericResponse<string> 
                 {
                     IsSuccess = false,
                     Message = "Invalid External Authentication"
                 });
             }
-            return Ok(new GenericResponse<string>
-            {
-                IsSuccess = true,
-                Payload = "JWT To Send"
-            });
         }
     }
 }

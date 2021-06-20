@@ -8,5 +8,7 @@ namespace KC.WebApi.Services
         Task<CreateUserResponse> CreateUser(CreateUserRequest request);
 
         Task<string> Authenticate(AuthenticateUserRequest request, string role);
+
+        Task<string> AuthenticateExternalUser(AuthenticateExternalUserRequest request, string role);
     }
 }
