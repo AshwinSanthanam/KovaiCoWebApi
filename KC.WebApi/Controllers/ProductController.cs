@@ -1,4 +1,5 @@
-﻿using KC.WebApi.Models;
+﻿using KC.Base.Validators;
+using KC.WebApi.Models;
 using KC.WebApi.Models.Product;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,14 @@ namespace KC.WebApi.Controllers
                 {
                     IsSuccess = true,
                     Payload = response
+                });
+            }
+            catch (DataIntegrityException ex)
+            {
+                return Conflict(new GenericResponse<CreateOrUpdateProductResponse> 
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
                 });
             }
             catch (InvalidOperationException)
