@@ -8,6 +8,7 @@ namespace KC.Base.Models
         public string Password { get; set; }
         public long RoleId { get; set; }
         public Role Role { get; set; }
+        public bool IsSocialLogin { get; set; }
 
     }
 }

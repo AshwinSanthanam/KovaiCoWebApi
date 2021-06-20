@@ -13,9 +13,11 @@ namespace KC.DataAccess.EntityConfigurations
             builder.Property(x => x.Email).HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.HasIndex(x => x.Email).IsUnique();
 
-            builder.Property(x => x.Password).HasColumnType("varchar").HasMaxLength(20).IsRequired();
+            builder.Property(x => x.Password).HasColumnType("varchar").HasMaxLength(20);
 
             builder.Property(x => x.RoleId).IsRequired();
+
+            builder.Property(x => x.IsSocialLogin).HasColumnType("bit").IsRequired();
 
             builder.HasIndex(x => new { x.Email, x.Password });
         }
