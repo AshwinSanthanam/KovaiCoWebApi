@@ -5,7 +5,7 @@ namespace KC.WebApi.Services
 {
     public interface IUserService
     {
-        Task<CreateUserResponse> CreateUser(CreateUserRequest request);
+        Task<CreateUserResponse> CreateUser(CreateUserRequest request, string role);
 
         Task<string> Authenticate(AuthenticateUserRequest request, string role);
 

@@ -25,9 +25,21 @@ namespace KC.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
+            return await Create(request, "user");
+        }
+
+        [HttpPost]
+        [Route("admin")]
+        public async Task<IActionResult> CreateAdmin([FromBody] CreateUserRequest request)
+        {
+            return await Create(request, "admin");
+        }
+
+        private async Task<IActionResult> Create(CreateUserRequest request, string role)
+        {
             try
             {
-                var createUserResponse = await _userService.CreateUser(request);
+                var createUserResponse = await _userService.CreateUser(request, role);
                 var response = new GenericResponse<CreateUserResponse>
                 {
                     IsSuccess = true,
@@ -35,7 +47,7 @@ namespace KC.WebApi.Controllers
                 };
                 return Ok(response);
             }
-            catch(DataIntegrityException ex)
+            catch (DataIntegrityException ex)
             {
                 var response = new GenericResponse<CreateUserResponse>
                 {

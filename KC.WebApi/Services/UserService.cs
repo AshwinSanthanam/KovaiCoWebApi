@@ -36,10 +36,10 @@ namespace KC.WebApi.Services
             _externalTokenValidationService = externalTokenValidationService;
         }
 
-        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
+        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request, string role)
         {
             var transientUser = _mapper.Map(request, new TransientUser());
-            transientUser.RoleId = await _roleQueries.GetRoleId("user");
+            transientUser.RoleId = await _roleQueries.GetRoleId(role);
             await _userValidator.Validate(transientUser);
             var user = await _repository.InsertUser(transientUser);
             return _mapper.Map(user, new CreateUserResponse());
