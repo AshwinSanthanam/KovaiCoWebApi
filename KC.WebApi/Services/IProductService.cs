@@ -11,6 +11,6 @@ namespace KC.WebApi.Services
 
         Task DeleteProduct(long id);
 
-        Task<IEnumerable<Product>> GetProducts(int pageSize, int offset, string productName); 
+        Task<IEnumerable<GetProductResponse>> GetProducts(int pageSize, int offset, string productName); 
     }
 }

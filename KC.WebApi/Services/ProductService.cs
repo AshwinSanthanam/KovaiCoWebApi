@@ -45,7 +45,7 @@ namespace KC.WebApi.Services
             await _repository.DeleteProduct(id);
         }
 
-        public async Task<IEnumerable<Product>> GetProducts(int pageSize, int offset, string productName)
+        public async Task<IEnumerable<GetProductResponse>> GetProducts(int pageSize, int offset, string productName)
         {
             var products = _repository.Products;
             if(!string.IsNullOrEmpty(productName))
@@ -54,7 +54,13 @@ namespace KC.WebApi.Services
                 products = products.Where(x => x.Name.Contains(productNameLowerCase));
             }
             return await products.OrderBy(x => x.Name).Skip(offset * pageSize).Take(pageSize).
-                ToListAsync();
+                Select(x => new GetProductResponse 
+                {
+                    Id = x.Id,
+                    ImageUrl = x.ImageUrl,
+                    Name = x.Name,
+                    Price = x.Price
+                }).ToListAsync();
         }
     }
 }

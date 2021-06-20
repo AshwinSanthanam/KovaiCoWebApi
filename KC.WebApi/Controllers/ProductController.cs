@@ -5,6 +5,7 @@ using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KC.WebApi.Controllers
@@ -78,7 +79,11 @@ namespace KC.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProducts(int pageSize, int offset, string productName)
         {
-            return Ok(await _productService.GetProducts(pageSize, offset, productName));
+            return Ok(new GenericResponse<IEnumerable<GetProductResponse>> 
+            {
+                IsSuccess = true,
+                Payload = await _productService.GetProducts(pageSize, offset, productName)
+            });
         }
     }
 }
