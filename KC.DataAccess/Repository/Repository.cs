@@ -46,6 +46,7 @@ namespace KC.DataAccess.Repository
         public async Task<Product> InsertProduct(TransientProduct transientProduct)
         {
             var product = AutoMapperConfiguration.Mapper.Map(transientProduct, new Product());
+            product.Name = product.Name.ToLower();
             InsertEntity(product);
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
@@ -71,6 +72,7 @@ namespace KC.DataAccess.Repository
         public async Task<Product> UpdateProduct(long id, TransientProduct transientProduct)
         {
             var productToBeUpdated = await _dbContext.Products.FirstAsync(x => x.Id == id);
+            productToBeUpdated.Name = productToBeUpdated.Name.ToLower();
             AutoMapperConfiguration.Mapper.Map(transientProduct, productToBeUpdated);
             UpdateEntity(productToBeUpdated);
             _dbContext.Products.Update(productToBeUpdated);

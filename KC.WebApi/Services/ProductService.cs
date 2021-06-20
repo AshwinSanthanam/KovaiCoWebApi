@@ -4,6 +4,9 @@ using KC.Base.Models;
 using KC.Base.TransientModels;
 using KC.Base.Validators;
 using KC.WebApi.Models.Product;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KC.WebApi.Services
@@ -40,6 +43,18 @@ namespace KC.WebApi.Services
         public async Task DeleteProduct(long id)
         {
             await _repository.DeleteProduct(id);
+        }
+
+        public async Task<IEnumerable<Product>> GetProducts(int pageSize, int offset, string productName)
+        {
+            var products = _repository.Products;
+            if(!string.IsNullOrEmpty(productName))
+            {
+                string productNameLowerCase = productName.ToLower();
+                products = products.Where(x => x.Name.Contains(productNameLowerCase));
+            }
+            return await products.OrderBy(x => x.Name).Skip(offset * pageSize).Take(pageSize).
+                ToListAsync();
         }
     }
 }

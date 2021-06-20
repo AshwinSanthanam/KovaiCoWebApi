@@ -73,5 +73,12 @@ namespace KC.WebApi.Controllers
                 });
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetProducts(int pageSize, int offset, string productName)
+        {
+            return Ok(await _productService.GetProducts(pageSize, offset, productName));
+        }
     }
 }
