@@ -60,6 +60,7 @@ namespace KC.DataAccess.Repository
                 Password = transientUser.Password,
                 IsActive = true,
                 RoleId = transientUser.RoleId,
+                IsSocialLogin = transientUser.IsSocialLogin,
                 CreatedOn = DateTimeOffset.Now
             };
             _dbContext.Users.Add(user);
@@ -82,6 +83,7 @@ namespace KC.DataAccess.Repository
             var userToBeUpdated = await _dbContext.Users.FirstAsync(x => x.Id == id);
             userToBeUpdated.Email = transientUser.Email;
             userToBeUpdated.Password = transientUser.Password;
+            userToBeUpdated.IsSocialLogin = transientUser.IsSocialLogin;
             userToBeUpdated.UpdatedOn = DateTimeOffset.Now;
             _dbContext.Users.Update(userToBeUpdated);
             await _dbContext.SaveChangesAsync();
