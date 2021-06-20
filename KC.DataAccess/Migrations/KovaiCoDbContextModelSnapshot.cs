@@ -111,10 +111,8 @@ namespace KC.DataAccess.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSocialLogin")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
