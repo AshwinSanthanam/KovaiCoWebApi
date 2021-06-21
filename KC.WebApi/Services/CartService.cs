@@ -3,6 +3,7 @@ using KC.Base;
 using KC.Base.Models;
 using KC.Base.Queries;
 using KC.Base.TransientModels;
+using KC.Base.Validators;
 using KC.WebApi.Models.Cart;
 using KC.WebApi.Models.Product;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,35 @@ namespace KC.WebApi.Services
             _mapper = mapper;
             _userQueries = userQueries;
             _cartQueries = cartQueries;
+        }
+
+        public async Task<Cart> AlterQuantity(CartResource resource, string userEmail)
+        {
+            var transientCart = _mapper.Map(resource, new TransientCart());
+            var user = await _userQueries.GetUser(userEmail);
+            transientCart.UserId = user.Id;
+            try
+            {
+                var cart = await _cartQueries.GetActiveCart(user.Id, resource.ProductId);
+                transientCart.Quantity += cart.Quantity;
+                if (transientCart.Quantity <= 0)
+                {
+                    transientCart.Quantity = 0;
+                    return await _repository.DeleteCart(cart.Id);
+                }
+                else
+                {
+                    return await _repository.UpdateCart(cart.Id, transientCart);
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                if (transientCart.Quantity <= 0)
+                {
+                    return null;
+                }
+                return await _repository.InsertCart(transientCart);
+            }
         }
 
         public async Task<Cart> CreateOrUpdateCart(CartResource resource, string userEmail)

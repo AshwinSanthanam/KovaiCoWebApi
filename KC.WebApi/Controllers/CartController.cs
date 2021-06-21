@@ -37,6 +37,18 @@ namespace KC.WebApi.Controllers
             });
         }
 
+        [HttpPost]
+        [Route("change")]
+        public async Task<IActionResult> AlterQuantity([FromBody] CartResource cartResource)
+        {
+            string email = GetEmail(HttpContext);
+            await _cartService.AlterQuantity(cartResource, email);
+            return Ok(new GenericResponse<object>
+            {
+                IsSuccess = true
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCarts()
         {
