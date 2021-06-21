@@ -53,11 +53,11 @@ namespace KC.WebApi.Controllers
         public async Task<IActionResult> GetCarts()
         {
             string email = GetEmail(HttpContext);
-            var cartResources = await _cartService.GetProductsInActiveCart(email);
-            return Ok(new GenericResponse<IEnumerable<CartResource>>
+            var completeCart = await _cartService.GetCompleteCart(email);
+            return Ok(new GenericResponse<CompleteCart>
             {
                 IsSuccess = true,
-                Payload = cartResources
+                Payload = completeCart
             });
         }
 

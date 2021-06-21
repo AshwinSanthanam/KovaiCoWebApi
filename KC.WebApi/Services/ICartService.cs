@@ -11,7 +11,7 @@ namespace KC.WebApi.Services
 
         Task<Cart> DeleteCart(long productId, string userEmail);
 
-        Task<IEnumerable<CartResource>> GetProductsInActiveCart(string userEmail);
+        Task<CompleteCart> GetCompleteCart(string userEmail);
 
         Task<Cart> AlterQuantity(CartResource resource, string userEmail);
     }

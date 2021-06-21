@@ -93,15 +93,27 @@ namespace KC.WebApi.Services
             return await _repository.DeleteCart(cart.Id);
         }
 
-        public async Task<IEnumerable<CartResource>> GetProductsInActiveCart(string userEmail)
+        public async Task<CompleteCart> GetCompleteCart(string userEmail)
         {
             var user = await _userQueries.GetUser(userEmail);
-            var carts = (await _cartQueries.GetAllActiveCarts(user.Id)).Select(x => new CartResource 
+            var baseCart = await _cartQueries.GetAllActiveCarts(user.Id);
+            var cartItems = baseCart.Select(x => new CartItem
             {
-                ProductId = x.ProductId,
+                Product = new GetProductResponse
+                {
+                    Id = x.Product.Id,
+                    ImageUrl = x.Product.ImageUrl,
+                    Name = x.Product.Name,
+                    Price = x.Product.Price
+                },
                 Quantity = x.Quantity
             });
-            return carts;
+            var cart = new CompleteCart
+            {
+                CartItems = cartItems,
+                TotalSum = cartItems.Sum(x => x.Quantity * x.Product.Price)
+            };
+            return cart;
         }
     }
 }
