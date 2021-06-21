@@ -4,6 +4,7 @@ using KC.Base.Models;
 using KC.Base.Queries;
 using KC.Base.TransientModels;
 using KC.Base.Validators;
+using KC.WebApi.Models.Exceptions;
 using KC.WebApi.Models.User;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -86,6 +87,13 @@ namespace KC.WebApi.Services
                     RoleId = await _roleQueries.GetRoleId(role)
                 };
                 user = await _repository.InsertUser(transientUser);
+            }
+            else
+            {
+                if(user.Role.Name != role)
+                {
+                    throw new IncorrectRoleException();
+                }
             }
             return GenerateJSONWebToken(user);
         }

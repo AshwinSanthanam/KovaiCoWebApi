@@ -2,6 +2,7 @@
 using KC.Base.Models;
 using KC.Base.Validators;
 using KC.WebApi.Models;
+using KC.WebApi.Models.Exceptions;
 using KC.WebApi.Models.User;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -118,6 +119,14 @@ namespace KC.WebApi.Controllers
                 {
                     IsSuccess = true,
                     Payload = jwt
+                });
+            }
+            catch(IncorrectRoleException)
+            {
+                return Unauthorized(new GenericResponse<string>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid Credentials"
                 });
             }
             catch (Exception)
