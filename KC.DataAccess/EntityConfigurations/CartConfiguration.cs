@@ -9,6 +9,10 @@ namespace KC.DataAccess.EntityConfigurations
         protected override void ConfigureChild(EntityTypeBuilder<Cart> builder)
         {
             builder.ToTable("Carts");
+
+            builder.Property(x => x.Quantity).IsRequired();
+
+            builder.HasIndex(x => new { x.ProductId, x.UserId });
         }
     }
 }
