@@ -41,11 +41,11 @@ namespace KC.WebApi.Services
             return await _repository.DeleteCart(cart.Id);
         }
 
-        public async Task<IEnumerable<long>> GetCarts(string userEmail)
+        public async Task<IEnumerable<long>> GetProductsInActiveCart(string userEmail)
         {
             var user = await _userQueries.GetUser(userEmail);
             var carts = await _cartQueries.GetAllActiveCarts(user.Id);
-            return carts.Select(x => x.Id);
+            return carts.Select(x => x.ProductId);
         }
     }
 }

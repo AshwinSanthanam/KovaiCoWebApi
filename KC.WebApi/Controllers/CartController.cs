@@ -63,7 +63,7 @@ namespace KC.WebApi.Controllers
         public async Task<IActionResult> GetCarts()
         {
             string email = GetEmail(HttpContext);
-            var cartIds = await _cartService.GetCarts(email);
+            var cartIds = await _cartService.GetProductsInActiveCart(email);
             return Ok(new GenericResponse<IEnumerable<long>>
             {
                 IsSuccess = true,
