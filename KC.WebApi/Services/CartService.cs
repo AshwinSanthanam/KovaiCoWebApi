@@ -36,7 +36,15 @@ namespace KC.WebApi.Services
             try
             {
                 var cart = await _cartQueries.GetActiveCart(user.Id, resource.ProductId);
-                return await _repository.UpdateCart(cart.Id, transientCart);
+                if (transientCart.Quantity == 0)
+                {
+                    await _repository.DeleteCart(cart.Id);
+                    return cart;
+                }
+                else
+                {
+                    return await _repository.UpdateCart(cart.Id, transientCart);
+                }
             }
             catch (InvalidOperationException)
             {
@@ -51,17 +59,15 @@ namespace KC.WebApi.Services
             return await _repository.DeleteCart(cart.Id);
         }
 
-        public async Task<IEnumerable<GetProductResponse>> GetProductsInActiveCart(string userEmail)
+        public async Task<IEnumerable<CartResource>> GetProductsInActiveCart(string userEmail)
         {
             var user = await _userQueries.GetUser(userEmail);
-            var carts = await _cartQueries.GetAllActiveCarts(user.Id);
-            return carts.Select(x => x.Product).Select(x => new GetProductResponse 
+            var carts = (await _cartQueries.GetAllActiveCarts(user.Id)).Select(x => new CartResource 
             {
-                Id = x.Id,
-                ImageUrl = x.ImageUrl,
-                Name = x.Name,
-                Price = x.Price
+                ProductId = x.ProductId,
+                Quantity = x.Quantity
             });
+            return carts;
         }
     }
 }

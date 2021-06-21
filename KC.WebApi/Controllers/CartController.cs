@@ -37,38 +37,15 @@ namespace KC.WebApi.Controllers
             });
         }
 
-        [HttpDelete]
-        [Route("product/{productId}")]
-        public async Task<IActionResult> DeleteCart(long productId)
-        {
-            try
-            {
-                string email = GetEmail(HttpContext);
-                await _cartService.DeleteCart(productId, email);
-                return Ok(new GenericResponse<object> 
-                {
-                    IsSuccess = true
-                });
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound(new GenericResponse<object>
-                {
-                    IsSuccess = false,
-                    Message = "Invalid Product Id provided for delete"
-                });
-            }
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetCarts()
         {
             string email = GetEmail(HttpContext);
-            var products = await _cartService.GetProductsInActiveCart(email);
-            return Ok(new GenericResponse<IEnumerable<GetProductResponse>>
+            var cartResources = await _cartService.GetProductsInActiveCart(email);
+            return Ok(new GenericResponse<IEnumerable<CartResource>>
             {
                 IsSuccess = true,
-                Payload = products
+                Payload = cartResources
             });
         }
 
