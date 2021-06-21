@@ -4,6 +4,7 @@ using KC.Base.Models;
 using KC.Base.Queries;
 using KC.Base.TransientModels;
 using KC.WebApi.Models.Cart;
+using KC.WebApi.Models.Product;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,11 +42,17 @@ namespace KC.WebApi.Services
             return await _repository.DeleteCart(cart.Id);
         }
 
-        public async Task<IEnumerable<long>> GetProductsInActiveCart(string userEmail)
+        public async Task<IEnumerable<GetProductResponse>> GetProductsInActiveCart(string userEmail)
         {
             var user = await _userQueries.GetUser(userEmail);
             var carts = await _cartQueries.GetAllActiveCarts(user.Id);
-            return carts.Select(x => x.ProductId);
+            return carts.Select(x => x.Product).Select(x => new GetProductResponse 
+            {
+                Id = x.Id,
+                ImageUrl = x.ImageUrl,
+                Name = x.Name,
+                Price = x.Price
+            });
         }
     }
 }

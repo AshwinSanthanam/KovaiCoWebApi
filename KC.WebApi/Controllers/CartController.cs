@@ -1,5 +1,6 @@
 ﻿using KC.WebApi.Models;
 using KC.WebApi.Models.Cart;
+using KC.WebApi.Models.Product;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -63,11 +64,11 @@ namespace KC.WebApi.Controllers
         public async Task<IActionResult> GetCarts()
         {
             string email = GetEmail(HttpContext);
-            var cartIds = await _cartService.GetProductsInActiveCart(email);
-            return Ok(new GenericResponse<IEnumerable<long>>
+            var products = await _cartService.GetProductsInActiveCart(email);
+            return Ok(new GenericResponse<IEnumerable<GetProductResponse>>
             {
                 IsSuccess = true,
-                Payload = cartIds
+                Payload = products
             });
         }
 
