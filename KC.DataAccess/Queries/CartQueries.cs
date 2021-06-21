@@ -24,7 +24,7 @@ namespace KC.DataAccess.Queries
 
         public async Task<IEnumerable<Cart>> GetAllActiveCarts(long userId)
         {
-            return await _repository.Carts.Where(x => x.IsActive && x.UserId == userId).ToListAsync();
+            return await _repository.Carts.Where(x => x.IsActive && x.UserId == userId && x.Product.IsActive).ToListAsync();
         }
     }
 }
