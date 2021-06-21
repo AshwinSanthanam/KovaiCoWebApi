@@ -1,14 +1,13 @@
-﻿using KC.Base.Models;
-using KC.WebApi.Models;
+﻿using KC.WebApi.Models;
 using KC.WebApi.Models.Cart;
 using KC.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace KC.WebApi.Controllers
@@ -30,13 +29,38 @@ namespace KC.WebApi.Controllers
         {
             string email = GetEmail(HttpContext);
             await _cartService.CreateCart(cartResource, email);
-            return Ok();
+            return Ok(new GenericResponse<object>
+            {
+                IsSuccess = true
+            });
+        }
+
+        [HttpDelete]
+        [Route("product/{productId}")]
+        public async Task<IActionResult> DeleteCart(long productId)
+        {
+            try
+            {
+                string email = GetEmail(HttpContext);
+                await _cartService.DeleteCart(productId, email);
+                return Ok(new GenericResponse<object> 
+                {
+                    IsSuccess = true
+                });
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound(new GenericResponse<object>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid Product Id provided for delete"
+                });
+            }
         }
 
         private string GetEmail(HttpContext httpContext)
         {
-            StringValues authorizationToken;
-            httpContext.Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authorizationToken);
             var jwt = authorizationToken.ToString().Split(' ')[1];
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(jwt);

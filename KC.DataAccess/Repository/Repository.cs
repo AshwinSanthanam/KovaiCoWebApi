@@ -26,9 +26,13 @@ namespace KC.DataAccess.Repository
 
         public IQueryable<Cart> Carts => _dbContext.Carts.Include(x => x.Product).Include(x => x.User).AsQueryable();
 
-        public Task<Cart> DeleteCart(long id)
+        public async Task<Cart> DeleteCart(long id)
         {
-            throw new NotImplementedException();
+            var cartToDelete = await _dbContext.Carts.FirstAsync(x => x.Id == id);
+            DeleteEntity(cartToDelete);
+            _dbContext.Carts.Update(cartToDelete);
+            await _dbContext.SaveChangesAsync();
+            return cartToDelete;
         }
 
         public async Task<Product> DeleteProduct(long id)
