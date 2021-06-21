@@ -7,5 +7,7 @@ namespace KC.WebApi.Services
     public interface IJwtService
     {
         string GenerateJwt(IEnumerable<Claim> claims, DateTime expiry, string key);
+
+        Dictionary<string, string> GetClaims(string token);
     }
 }

@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace KC.WebApi.Controllers
@@ -20,10 +17,12 @@ namespace KC.WebApi.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly IJwtService _jwtService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IJwtService jwtService)
         {
             _cartService = cartService;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -76,10 +75,8 @@ namespace KC.WebApi.Controllers
         {
             httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authorizationToken);
             var jwt = authorizationToken.ToString().Split(' ')[1];
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(jwt);
-            var token = jsonToken as JwtSecurityToken;
-            return token.Claims.First(x => x.Type == "email").Value;
+            var claims = _jwtService.GetClaims(jwt);
+            return claims["email"];
         }
     }
 }
