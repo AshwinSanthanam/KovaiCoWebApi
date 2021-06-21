@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KC.Base.TransientModels;
+using KC.WebApi.Models.Cart;
 using KC.WebApi.Models.Product;
 using KC.WebApi.Models.User;
 
@@ -11,6 +12,7 @@ namespace KC.WebApi.MappingProfiles
         {
             CreateMap<CreateUserRequest, TransientUser>();
             CreateMap<CreateOrUpdateProductRequest, TransientProduct>();
+            CreateMap<CartResource, TransientCart>();
         }
     }
 }

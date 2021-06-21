@@ -18,6 +18,7 @@ namespace KC.WebApi.Registry
             _services.AddScoped<IExternalTokenValidationService, ExternalTokenValidationService>();
             _services.AddScoped<IUserService, UserService>();
             _services.AddScoped<IProductService, ProductService>();
+            _services.AddScoped<ICartService, CartService>();
         }
     }
 }

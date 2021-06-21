@@ -9,6 +9,7 @@ namespace KC.DataAccess.MappingProfiles
         public TransientToDomainProfle()
         {
             CreateMap<TransientProduct, Product>();
+            CreateMap<TransientCart, Cart>();
         }
     }
 }

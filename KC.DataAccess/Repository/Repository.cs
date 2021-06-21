@@ -24,6 +24,13 @@ namespace KC.DataAccess.Repository
 
         public IQueryable<Product> Products => _dbContext.Products.AsQueryable();
 
+        public IQueryable<Cart> Carts => _dbContext.Carts.Include(x => x.Product).Include(x => x.User).AsQueryable();
+
+        public Task<Cart> DeleteCart(long id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Product> DeleteProduct(long id)
         {
             var productToBeDeleted = await _dbContext.Products.FirstAsync(x => x.Id == id);
@@ -41,6 +48,15 @@ namespace KC.DataAccess.Repository
             _dbContext.Users.Update(userToBeDeleted);
             await _dbContext.SaveChangesAsync();
             return userToBeDeleted;
+        }
+
+        public async Task<Cart> InsertCart(TransientCart transientCart)
+        {
+            var cart = AutoMapperConfiguration.Mapper.Map(transientCart, new Cart());
+            InsertEntity(cart);
+            _dbContext.Carts.Add(cart);
+            await _dbContext.SaveChangesAsync();
+            return cart;
         }
 
         public async Task<Product> InsertProduct(TransientProduct transientProduct)
@@ -67,6 +83,11 @@ namespace KC.DataAccess.Repository
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
             return user;
+        }
+
+        public Task<Cart> UpdateCart(long id, TransientCart transientCart)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Product> UpdateProduct(long id, TransientProduct transientProduct)
