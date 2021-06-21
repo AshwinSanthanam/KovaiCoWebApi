@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +58,18 @@ namespace KC.WebApi.Controllers
                     Message = "Invalid Product Id provided for delete"
                 });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCarts()
+        {
+            string email = GetEmail(HttpContext);
+            var cartIds = await _cartService.GetCarts(email);
+            return Ok(new GenericResponse<IEnumerable<long>>
+            {
+                IsSuccess = true,
+                Payload = cartIds
+            });
         }
 
         private string GetEmail(HttpContext httpContext)

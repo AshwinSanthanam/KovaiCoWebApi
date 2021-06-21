@@ -32,6 +32,7 @@ namespace KC.WebApi.Registry
             _services.AddScoped<IProductValidator, ProductValidator>();
             _services.AddScoped<IRoleQueries, RoleQueries>();
             _services.AddScoped<IUserQueries, UserQueries>();
+            _services.AddScoped<ICartQueries, CartQueries>();
         }
     }
 }
