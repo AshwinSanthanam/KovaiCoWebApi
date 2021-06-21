@@ -18,7 +18,6 @@ namespace KC.Base
 
         Task<User> UpdateUser(long id, TransientUser transientUser);
         Task<Product> UpdateProduct(long id, TransientProduct transientProduct);
-        Task<Cart> UpdateCart(long id, TransientCart transientCart);
 
         Task<User> DeleteUser(long id);
         Task<Product> DeleteProduct(long id);

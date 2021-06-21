@@ -85,11 +85,6 @@ namespace KC.DataAccess.Repository
             return user;
         }
 
-        public Task<Cart> UpdateCart(long id, TransientCart transientCart)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Product> UpdateProduct(long id, TransientProduct transientProduct)
         {
             var productToBeUpdated = await _dbContext.Products.FirstAsync(x => x.Id == id);
