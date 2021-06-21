@@ -47,7 +47,11 @@ namespace KC.WebApi.Services
                 }
             }
             catch (InvalidOperationException)
-            {
+            {   
+                if(transientCart.Quantity <= 0)
+                {
+                    return null;
+                }
                 return await _repository.InsertCart(transientCart);
             }
         }
