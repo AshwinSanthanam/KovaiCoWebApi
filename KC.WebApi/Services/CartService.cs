@@ -6,6 +6,7 @@ using KC.Base.TransientModels;
 using KC.WebApi.Models.Cart;
 using KC.WebApi.Models.Product;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,12 +28,20 @@ namespace KC.WebApi.Services
             _cartQueries = cartQueries;
         }
 
-        public async Task<Cart> CreateCart(CartResource resource, string userEmail)
+        public async Task<Cart> CreateOrUpdateCart(CartResource resource, string userEmail)
         {
             var transientCart = _mapper.Map(resource, new TransientCart());
             var user = await _userQueries.GetUser(userEmail);
             transientCart.UserId = user.Id;
-            return await _repository.InsertCart(transientCart);
+            try
+            {
+                var cart = await _cartQueries.GetActiveCart(user.Id, resource.ProductId);
+                return await _repository.UpdateCart(cart.Id, transientCart);
+            }
+            catch (InvalidOperationException)
+            {
+                return await _repository.InsertCart(transientCart);
+            }
         }
 
         public async Task<Cart> DeleteCart(long productId, string userEmail)

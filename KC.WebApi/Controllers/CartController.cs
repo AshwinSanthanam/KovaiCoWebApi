@@ -27,10 +27,10 @@ namespace KC.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCart([FromBody] CartResource cartResource)
+        public async Task<IActionResult> CreateOrUpdateCart([FromBody] CartResource cartResource)
         {
             string email = GetEmail(HttpContext);
-            await _cartService.CreateCart(cartResource, email);
+            await _cartService.CreateOrUpdateCart(cartResource, email);
             return Ok(new GenericResponse<object>
             {
                 IsSuccess = true

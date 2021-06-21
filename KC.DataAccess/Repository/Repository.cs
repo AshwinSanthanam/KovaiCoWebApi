@@ -89,6 +89,16 @@ namespace KC.DataAccess.Repository
             return user;
         }
 
+        public async Task<Cart> UpdateCart(long id, TransientCart transientCart)
+        {
+            var cartToBeUpdated = await _dbContext.Carts.FirstAsync(x => x.Id == id);
+            AutoMapperConfiguration.Mapper.Map(transientCart, cartToBeUpdated);
+            UpdateEntity(cartToBeUpdated);
+            _dbContext.Carts.Update(cartToBeUpdated);
+            await _dbContext.SaveChangesAsync();
+            return cartToBeUpdated;
+        }
+
         public async Task<Product> UpdateProduct(long id, TransientProduct transientProduct)
         {
             var productToBeUpdated = await _dbContext.Products.FirstAsync(x => x.Id == id);
