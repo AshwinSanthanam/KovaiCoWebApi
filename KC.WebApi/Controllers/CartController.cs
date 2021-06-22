@@ -27,17 +27,6 @@ namespace KC.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrUpdateCart([FromBody] CartResource cartResource)
-        {
-            string email = GetEmail(HttpContext);
-            await _cartService.CreateOrUpdateCart(cartResource, email);
-            return Ok(new GenericResponse<object>
-            {
-                IsSuccess = true
-            });
-        }
-
-        [HttpPost]
         [Route("change")]
         public async Task<IActionResult> AlterQuantity([FromBody] CartResource cartResource)
         {
